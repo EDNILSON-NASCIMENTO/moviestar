@@ -22,6 +22,11 @@
             return password_hash($password, PASSWORD_DEFAULT);
         }
 
+
+        public function imageGenerateName(){
+            return bin2hex(random_bytes(60)).".jpeg";
+        }
+
     }
 
     interface UserDAOInterface {
@@ -36,7 +41,7 @@
         public function findById($id);
         public function findbyToken($token);
         public function destroyToken();
-        public function changePassowrd(User $user);
+        public function changePassword(User $user);
     }
 
 ?>

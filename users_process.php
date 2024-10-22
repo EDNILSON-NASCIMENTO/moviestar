@@ -42,13 +42,20 @@
             if(in_array($image["type"], $imageTypes)){
 
                 //Checar se jpg
-                if(in_array($image, $jpgArrayg)){
+                if(in_array($image["type"], $jpgArray)){
                     $imageFile = imagecreatefromjpeg($image["tmp_name"]);
                 }
+            
                 else {
                     $imageFile = imagecreatefrompng($image["tmp_name"]);
                 }
 
+                $imageName = $user->imageGenerateName();
+
+                imagejpeg($imageFile, "./img/users/" . $imageName, 100);
+
+                $userData->image = $imageName;
+                
 
             }
             else {
@@ -61,7 +68,30 @@
 
     }
     else if ($type === "changepassword"){
+        $password = filter_input(INPUT_POST, "password");
+        $confirmpassword = filter_input(INPUT_POST, "confirmpassword");
+        
+        //Resgata dados do usuario
+        $userData = $userDao->verifyToken();
+        
+        $id = $userData->id;
 
+        if($password == $confirmpassword){
+
+            //Criar nova senha - objeto
+            $user = new User();
+
+            $finalPassword = $user->generatePassword($password);
+
+            $user->password = $finalPassword;
+            $user->id = $id;
+
+            $userDao->changePassword($user);
+
+        }
+        else {
+            $message->setMessage("As senhas não são iguais", "error", "back");
+        }
     }
     else {
         $message->setMessage("Informações inválidas!", "error", "index.php");

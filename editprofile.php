@@ -1,10 +1,8 @@
 <?php 
     require_once("templates/header.php");
-
     require_once("dao/UserDAO.php");
 
     $user = new User();
-
     $userDao = new UserDAO($conn, $BASE_URL);
 
     $userData = $userDao->verifyToken(true);
@@ -53,10 +51,11 @@
             </form>
             <div class="row" id="change-password-container">
                 <div class="col-md-4">
-                    <h2>Altarar a senha:</h2>
+                    <h2>Alterar a senha:</h2>
                     <p class="page-description">Digite a nova senha e confirme, para alterar sua senha:</p>
                     <form action="<?= $BASE_URL ?>users_process.php" method="POST">
                         <input type="hidden" name="type" value="changepassword">
+                        <input type="hidden" name="id" value="<?= $userData->id ?>">
                         <div class="form-group">
                             <label for="password">Senha:</label>
                             <input type="password" class="form-control" id="password" name="password" placeholder="Digite sua nova senha.">
